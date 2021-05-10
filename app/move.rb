@@ -1,12 +1,56 @@
-# This function is called on every turn of a game. It's how your Battlesnake decides where to move.
-# Valid moves are "up", "down", "left", or "right".
-# TODO: Use the information in board to decide your next move.
-def move(board)
-  puts board
 
-  # Choose a random direction to move in
+
+
+
+
+
+
+
+def move(board)
+
   possible_moves = ["up", "down", "left", "right"]
+  excluded_moves = []
+  
+  mySnake = board[:you]
+  myHead = mySnake[:head]
+  myHeadX = myHead[:x]
+  myHeadY = myHead[:y]
+  gameBoard = board[:board]
+
+  # Find nearby walls, exclude those directions
+  
+  boardWidth = gameBoard[:width]
+  boardHeight = gameBoard[:height]
+
+  #check left
+  if myHeadX == 0
+     excluded_moves.push(0, "left")
+     
+  end
+  #check right
+  if myHeadX + 1 == boardWidth
+    excluded_moves.push("right")
+  end
+  #check down
+  if myHeadY == 0
+    excluded_moves.push("down")
+  end
+  #check up
+  if myHeadY + 1 == boardHeight
+    excluded_moves.push("up")
+  end
+
+  possible_moves = possible_moves - excluded_moves
+
+  puts possible_moves
+
+  # Find head relative to body, exclude those directions
+
+
   move = possible_moves.sample
-  puts "MOVE: " + move
+  
+  
+  # puts "MOVE: " + move
   { "move": move }
+  
 end
