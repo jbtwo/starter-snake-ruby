@@ -1,56 +1,50 @@
+require_relative 'findWalls.rb'
+require_relative 'findSelf.rb'
+require_relative 'snake.rb'
 
+class MoveLogic
+  cattr_accessor :possible_moves
 
+  # start with arr of possible moves, @@ to make class var
+  @@possible_moves = %w[up down left right]
 
+  def self.move(request)
 
+# todo: separate board and you objects. make sure those are passed to logic methods 
 
+    board = request[:board]
+    you = request[:you]
+    boardWidth = board[:width]
+    boardHeight = board[:height]
 
+    puts boardWidth
 
+    # hash_snakes = board[:snakes]
+    # puts board.keys
+    # print hash_snakes
 
-def move(board)
+    board_snakes = []
 
-  possible_moves = ["up", "down", "left", "right"]
-  excluded_moves = []
-  
-  mySnake = board[:you]
-  myHead = mySnake[:head]
-  myHeadX = myHead[:x]
-  myHeadY = myHead[:y]
-  gameBoard = board[:board]
+    # hash_snakes.each do { |i| 
+    #   board_snakes.push(Snake.new(hash_snakes[i])) }
+    
+       
+    puts board_snakes
+    
+    # mySnake = board[:you]
+    # compare mySnake vs the 'other' snakes?
+    # pop mySnake off other_snakes
 
-  # Find nearby walls, exclude those directions
-  
-  boardWidth = gameBoard[:width]
-  boardHeight = gameBoard[:height]
+    # call findWalls method from WallLogic class
+    WallLogic.findWalls(you,boardWidth,boardHeight)
 
-  #check left
-  if myHeadX == 0
-     excluded_moves.push(0, "left")
-     
+    # subtract excluded wall moves from all possible
+    calculated_moves = @@possible_moves - WallLogic.exclude_walls
+
+    move = calculated_moves.sample
+
+    # puts "MOVE: " + move
+
+    { "move": move }
   end
-  #check right
-  if myHeadX + 1 == boardWidth
-    excluded_moves.push("right")
-  end
-  #check down
-  if myHeadY == 0
-    excluded_moves.push("down")
-  end
-  #check up
-  if myHeadY + 1 == boardHeight
-    excluded_moves.push("up")
-  end
-
-  possible_moves = possible_moves - excluded_moves
-
-  puts possible_moves
-
-  # Find head relative to body, exclude those directions
-
-
-  move = possible_moves.sample
-  
-  
-  # puts "MOVE: " + move
-  { "move": move }
-  
 end
