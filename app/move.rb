@@ -37,6 +37,22 @@ class MoveLogic
     # subtract excluded wall moves from all possible
     possible_moves -= excluded_moves
 
+    # try some lookahead stuffs ############
+
+    # for each remaining move, change head to new pos
+    possible_moves.each do | move |
+
+      if move == 'up'
+        @my_snake.head[:y] + 1
+      elsif move == 'down'
+        @my_snake.head[:y] - 1
+      elsif move == 'right'
+        @my_snake.head[:x] + 1
+      elsif move == 'left'
+        @my_snake.head[:x] - 1
+      end
+
+    end
 
     move = possible_moves.sample
 
