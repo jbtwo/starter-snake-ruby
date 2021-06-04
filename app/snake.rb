@@ -1,12 +1,12 @@
 class Snake
-   
-    def initialize(snake)
-       @id = id
-       @name = name
-       @health = health
-       @body = body
-       @head = head
-       @length = length
+  attr_accessor :id, :name, :health, :body, :head, :length
 
-    end
- end
+  def initialize(snake)
+    @id = snake[:id]
+    @name = snake[:name]
+    @health = snake[:health]
+    @body = snake[:body]
+    @head = snake[:head]
+    @length = snake[:length]
+  end
+end

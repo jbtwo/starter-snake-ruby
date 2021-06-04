@@ -1,49 +1,48 @@
 require_relative 'findWalls.rb'
 require_relative 'findSelf.rb'
+require_relative 'findOther.rb'
 require_relative 'snake.rb'
 
 class MoveLogic
-  cattr_accessor :possible_moves
-
-  # start with arr of possible moves, @@ to make class var
-  @@possible_moves = %w[up down left right]
-
   def self.move(request)
+    # start with arr of possible moves
+    possible_moves = %w[up down left right]
 
-# todo: separate board and you objects. make sure those are passed to logic methods 
-
+    # separate objects in request hash
     board = request[:board]
     you = request[:you]
     boardWidth = board[:width]
     boardHeight = board[:height]
 
-    puts boardWidth
+    # build array of all snakes
+    hash_snakes = board[:snakes]
 
-    # hash_snakes = board[:snakes]
-    # puts board.keys
-    # print hash_snakes
+    # compare snakes in array to find mine and opponent snakes
+    hash_snakes.each do |snake|
+      if snake[:id] == you[:id]
+        @my_snake = Snake.new(snake)
+      else
+        # todo: account for multiple snakes
+        @opp_snake = []
+        @opp_snake.push(Snake.new(snake))
+      end
+    end
 
-    board_snakes = []
-
-    # hash_snakes.each do { |i| 
-    #   board_snakes.push(Snake.new(hash_snakes[i])) }
-    
-       
-    puts board_snakes
-    
-    # mySnake = board[:you]
-    # compare mySnake vs the 'other' snakes?
-    # pop mySnake off other_snakes
-
-    # call findWalls method from WallLogic class
-    WallLogic.findWalls(you,boardWidth,boardHeight)
+    # call findWalls method from WallLogic class, add to excluded_moves array
+    excluded_moves =
+      WallLogic.findWalls(@my_snake, boardWidth, boardHeight) +
+        SelfLogic.findSelf(@my_snake) +
+        OtherLogic.findOther(@my_snake, @opp_snake)
 
     # subtract excluded wall moves from all possible
-    calculated_moves = @@possible_moves - WallLogic.exclude_walls
+    possible_moves -= excluded_moves
 
-    move = calculated_moves.sample
 
-    # puts "MOVE: " + move
+    move = possible_moves.sample
+
+    # move = 'up'
+
+    puts 'MOVE: ' + move
 
     { "move": move }
   end

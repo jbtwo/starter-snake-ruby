@@ -9,31 +9,28 @@ module WallLogic
   cattr_accessor :exclude_walls
 
   # self to define class method
-  def self.findWalls(board,boardWidth,boardHeight)
+  def self.findWalls(my_snake,boardWidth,boardHeight)
+
+    # puts my_snake
     
-    # array of moves that will cause death
-    @@exclude_walls = []
-    mySnake = board[:you]
-    myHead = mySnake[:head]
-    myHeadX = myHead[:x]
-    myHeadY = myHead[:y]
-    gameBoard = board[:board]
+    # initialize array of moves that will cause death
+    exclude_walls = []
 
-    # Find nearby walls, exclude those directions
+    # # Find nearby walls, exclude those directions
 
-    
+    # #check left
+    exclude_walls.push('left') if my_snake.head[:x] == 0
 
-    #check left
-    exclude_walls.push(0, 'left') if myHeadX == 0
+    # #check right
+    exclude_walls.push('right') if my_snake.head[:x] + 1 == boardWidth
 
-    #check right
-    exclude_walls.push('right') if myHeadX + 1 == boardWidth
+    # #check down
+    exclude_walls.push('down') if my_snake.head[:y] == 0
 
-    #check down
-    exclude_walls.push('down') if myHeadY == 0
+    # #check up
+    exclude_walls.push('up') if my_snake.head[:y] + 1 == boardHeight
 
-    #check up
-    exclude_walls.push('up') if myHeadY + 1 == boardHeight
+    exclude_walls
 
   end
 end
