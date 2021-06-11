@@ -2,6 +2,7 @@ require_relative 'findWalls.rb'
 require_relative 'findSelf.rb'
 require_relative 'findOther.rb'
 require_relative 'snake.rb'
+require_relative 'findFood.rb'
 
 class MoveLogic
   def self.move(request)
@@ -13,6 +14,7 @@ class MoveLogic
     you = request[:you]
     boardWidth = board[:width]
     boardHeight = board[:height]
+    food = board[:food]
 
     # build array of all snakes
     hash_snakes = board[:snakes]
@@ -37,10 +39,20 @@ class MoveLogic
     # subtract excluded wall moves from all possible
     possible_moves -= excluded_moves
 
+    # call findFood and compare to possible moves      
+    valid_food_moves = 
+    if board[:food].length > 0
+      FoodLogic.findFood(@my_snake,possible_moves,food) & possible_moves
+    else
+      nil
+    end
 
-    move = possible_moves.sample
-
-    # move = 'up'
+    # use valid_food_move if present
+    if valid_food_moves
+      move =  valid_food_moves.sample
+    elsif
+      move = possible_moves.sample
+    end
 
     puts 'MOVE: ' + move
 
