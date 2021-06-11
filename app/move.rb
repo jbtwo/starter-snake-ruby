@@ -37,25 +37,24 @@ class MoveLogic
         OtherLogic.findOther(@my_snake, @opp_snake)
 
     # subtract excluded wall moves from all possible
-    possible_moves -= excluded_moves
+    possible_moves -= excluded_moves # up, down
 
+    puts "possible:" + possible_moves.to_s
     # call findFood and compare to possible moves      
-    valid_food_moves = 
-    if board[:food].length > 0
-      FoodLogic.findFood(@my_snake,possible_moves,food) & possible_moves
-    else
-      nil
-    end
+    valid_food_moves = FoodLogic.findFood(@my_snake,possible_moves,food) & possible_moves
+
+    puts "valid:" + valid_food_moves.to_s
 
     # use valid_food_move if present
-    if valid_food_moves
-      move =  valid_food_moves.sample
+    if valid_food_moves.length > 0
+      @move =  valid_food_moves.sample
     elsif
-      move = possible_moves.sample
+      @move = possible_moves.sample
     end
 
-    puts 'MOVE: ' + move
+    puts "Turn ##{request[:turn].to_s}  - MOVE: " + @move
 
-    { "move": move }
+    { "move": @move }
+
   end
 end
