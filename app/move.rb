@@ -55,6 +55,7 @@ class MoveLogic
     puts "Turn ##{request[:turn].to_s}  - MOVE: " + @move
 
     { "move": @move }
+    
 
   end
 end
