@@ -35,7 +35,7 @@ module FoodLogic
     food_y_dir =
       if closest_food[:y] < my_snake.head[:y]
         'down'
-      elsif closest_food[:x] > my_snake.head[:x]
+      elsif closest_food[:y] > my_snake.head[:y]
         'up'
       else
         nil

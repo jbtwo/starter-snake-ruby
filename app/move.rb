@@ -46,16 +46,46 @@ class MoveLogic
     puts "valid:" + valid_food_moves.to_s
 
     # use valid_food_move if present
-    if valid_food_moves.length > 0
+    if valid_food_moves.length > 1
+      # when more than 1 valid_food_move, exclude ones that put me close to wall
+      valid_food_moves.each do | move |
+        if move == "left" && @my_snake.head[:x] < 3
+          valid_food_moves.delete("left")  
+        elsif move == "right" && (boardWidth - @my_snake.head[:x] + 1) < 3 
+          valid_food_moves.delete("right")  
+        elsif move == "down" && @my_snake.head[:y] < 3
+          valid_food_moves.delete("down")  
+        elsif move == "up" && (boardHeight - @my_snake.head[:y] + 1) < 3
+          valid_food_moves.delete("up") 
+        end
+      end
       @move =  valid_food_moves.sample
-    elsif
+    elsif valid_food_moves.length > 0
+      # todo: ignore when opponent closer/longer
+      @move =  valid_food_moves.sample
+    elsif possible_moves.length > 1
+
+      possible_moves.each do | move |
+        if move == "left" && @my_snake.head[:x] < 3
+          possible_moves.delete("left")  
+        elsif move == "right" && (boardWidth - @my_snake.head[:x] + 1) < 3 
+          possible_moves.delete("right")  
+        elsif move == "down" && @my_snake.head[:y] < 3
+          possible_moves.delete("down")  
+        elsif move == "up" && (boardHeight - @my_snake.head[:y] + 1) < 3
+          possible_moves.delete("up") 
+        end
+      end
+      @move = possible_moves.sample
+    else
       @move = possible_moves.sample
     end
+    
 
     puts "Turn ##{request[:turn].to_s}  - MOVE: " + @move
 
     { "move": @move }
     
-
+  
   end
 end
